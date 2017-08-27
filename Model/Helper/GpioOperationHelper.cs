@@ -20,7 +20,11 @@ namespace PiTest2.Model.Helper
         /// <param name="gpio"></param>
         public static void Open(int gpio)
         {
-            File.WriteAllText("/sys/class/gpio/export", gpio.ToString());
+            //gpioがオープン済みでない場合のみ
+            if(!IsOpen(gpio))
+            {
+                File.WriteAllText("/sys/class/gpio/export", gpio.ToString());
+            }
         }
 
         /// <summary>
