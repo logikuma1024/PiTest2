@@ -1,9 +1,5 @@
-﻿using PiTest2.Model.Controller;
-using PiTest2.Model.Helper;
+﻿using PiTest2.Model.Helper;
 using System;
-using System.IO;
-using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -17,8 +13,11 @@ namespace PiTest2
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            //2番ピンをオープンします。
+            //2番ピンが開いていない場合はOpenします。
             GpioOperationHelper.Open(2);
+
+            //書き込み可能方向にします。
+            GpioOperationHelper.SetDirection(2, GpioDirection.Out);
 
             //Lチカタスクを作成します。
             var task = Task.Run(async () =>
@@ -35,15 +34,12 @@ namespace PiTest2
                         Console.WriteLine("On");
                         GpioOperationHelper.SetValue(2, 1);
                     }
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
                 }
             });
 
             //タスクを実行し、完了を待機します。
             task.Wait();
-
-            //2番ピンをクローズします。
-            GpioOperationHelper.Close(2);
         }
     }
 }
